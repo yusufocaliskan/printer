@@ -7,8 +7,6 @@ import {
   Text,
   ToastAndroid,
   View,
-  Button,
-  StyleSheet,
 } from 'react-native';
 import {BluetoothManager} from 'react-native-bluetooth-escpos-printer';
 import {PERMISSIONS, requestMultiple, RESULTS} from 'react-native-permissions';
@@ -185,12 +183,11 @@ const App = () => {
     try {
       async function blueTooth() {
         const permissions = {
-          title: 'HSD bluetooth meminta izin untuk mengakses bluetooth',
-          message:
-            'HSD bluetooth memerlukan akses ke bluetooth untuk proses koneksi ke bluetooth printer',
-          buttonNeutral: 'Lain Waktu',
-          buttonNegative: 'Tidak',
-          buttonPositive: 'Boleh',
+          title: 'Bluetooth izini',
+          message: 'Bluetooth izini',
+          buttonNeutral: 'Daha sonra',
+          buttonNegative: 'Iptal',
+          buttonPositive: 'Onayla',
         };
 
         const bluetoothConnectGranted = await PermissionsAndroid.request(
