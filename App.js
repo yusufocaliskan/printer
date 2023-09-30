@@ -2,14 +2,19 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {
   ActivityIndicator,
   DeviceEventEmitter,
-  PermissionsAndroid,
   ScrollView,
   Text,
   ToastAndroid,
   View,
 } from 'react-native';
 import {BluetoothManager} from 'react-native-bluetooth-escpos-printer';
-import {PERMISSIONS, requestMultiple, RESULTS} from 'react-native-permissions';
+import {
+  check,
+  PERMISSIONS,
+  request,
+  requestMultiple,
+  RESULTS,
+} from 'react-native-permissions';
 import ItemList from './ItemList';
 import SamplePrint from './SamplePrint';
 import {styles} from './styles';
@@ -24,6 +29,8 @@ const App = () => {
   const [boundAddress, setBoundAddress] = useState('');
   const [isScaning, setIsScaning] = useState(false);
   const [isDisable, setIsDisable] = useState(false);
+
+  // Call the checkPermissions function as needed
 
   useEffect(() => {
     //Check if bluetooth is open.
@@ -190,16 +197,16 @@ const App = () => {
           buttonPositive: 'Onayla',
         };
 
-        const bluetoothConnectGranted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+        const bluetoothConnectGranted = await request(
+          PERMISSIONS.BLUETOOTH_CONNECT,
           permissions,
         );
-        if (bluetoothConnectGranted === PermissionsAndroid.RESULTS.GRANTED) {
-          const bluetoothScanGranted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+        if (bluetoothConnectGranted === RESULTS.GRANTED) {
+          const bluetoothScanGranted = await request(
+            PERMISSIONS.BLUETOOTH_SCAN,
             permissions,
           );
-          if (bluetoothScanGranted === PermissionsAndroid.RESULTS.GRANTED) {
+          if (bluetoothScanGranted === RESULTS.GRANTED) {
             scanDevices();
           }
         } else {
