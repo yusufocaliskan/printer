@@ -15,9 +15,9 @@ import {
   requestMultiple,
   RESULTS,
 } from 'react-native-permissions';
-import ItemList from './ItemList';
-import SamplePrint from './SamplePrint';
-import {styles} from './styles';
+import ItemList from './src/components/Items/ItemList';
+import PrintTestText from './src/PrintTestText';
+import {styles} from './src/styles';
 import CustomButton from './src/components/CustomButton';
 
 const App = () => {
@@ -28,12 +28,8 @@ const App = () => {
   const [name, setName] = useState('');
   const [boundAddress, setBoundAddress] = useState('');
   const [isScaning, setIsScaning] = useState(false);
-  const [isDisable, setIsDisable] = useState(false);
-
-  // Call the checkPermissions function as needed
 
   useEffect(() => {
-    //Check if bluetooth is open.
     BluetoothManager.isBluetoothEnabled().then(
       enabled => {
         setBleOpend(Boolean(enabled));
@@ -47,7 +43,7 @@ const App = () => {
     DeviceEventEmitter.addListener(
       BluetoothManager.EVENT_DEVICE_ALREADY_PAIRED,
       rsp => {
-        deviceAlreadPaired(rsp);
+        theDevicePaired(rsp);
       },
     );
     DeviceEventEmitter.addListener(BluetoothManager.EVENT_DEVICE_FOUND, rsp => {
@@ -69,9 +65,10 @@ const App = () => {
     if (pairedDevices.length < 1) {
       scan();
     }
-  }, [boundAddress, deviceAlreadPaired, deviceFoundEvent, pairedDevices, scan]);
+  }, [boundAddress, theDevicePaired, deviceFoundEvent, pairedDevices, scan]);
 
-  const deviceAlreadPaired = useCallback(
+  //Eşleşen cihazlar
+  const theDevicePaired = useCallback(
     rsp => {
       var ds = null;
 
@@ -93,10 +90,10 @@ const App = () => {
     [pairedDevices],
   );
 
+  //Bulunan
   const deviceFoundEvent = useCallback(
     rsp => {
       var r = null;
-      console.log('foundDs', foundDs);
       try {
         if (typeof rsp.device === 'object') {
           r = rsp.device;
@@ -132,7 +129,6 @@ const App = () => {
         setLoading(false);
         setBoundAddress(row.address);
         setName(row.name || 'UNKNOWN');
-        setIsDisable(false);
       },
       e => {
         setLoading(false);
@@ -157,6 +153,7 @@ const App = () => {
     );
   };
 
+  //Cihaz ara
   const scanDevices = useCallback(() => {
     setLoading(true);
     setIsScaning(true);
@@ -165,7 +162,7 @@ const App = () => {
         // const pairedDevices = s.paired;
         var found = s.found;
         try {
-          found = JSON.parse(found); //@FIX_it: the parse action too weired..
+          found = JSON.parse(found);
         } catch (e) {
           //ignore
         }
@@ -174,7 +171,6 @@ const App = () => {
           fds = found;
         }
         setFoundDs(fds);
-        console.log('fdsddd-->', fds);
         setLoading(false);
         setIsScaning(false);
       },
@@ -252,7 +248,7 @@ const App = () => {
       </View>
       <View style={styles.sectionView}>
         <Text style={styles.sectionTitle}>Yazdır</Text>
-        <SamplePrint />
+        <PrintTestText />
       </View>
 
       {!bleOpend && (
@@ -292,7 +288,7 @@ const App = () => {
                 textStye={{fontSize: 14}}
               />
             )}
-            {isScaning && <ActivityIndicator animating={true} size={30} />}
+            {isScaning && <ActivityIndicator animating={true} size={25} />}
           </View>
         </View>
         {!isScaning && (

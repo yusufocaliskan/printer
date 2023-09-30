@@ -1,6 +1,7 @@
 {
   "name": "printerx",
   "version": "0.0.1",
+  "author": "Yusuf Çalışkan <yusufocaliskan@gmail.com>",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
